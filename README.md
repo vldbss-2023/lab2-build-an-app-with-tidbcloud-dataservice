@@ -13,22 +13,23 @@ Before you start, ensure to have the following set up:
 2. Sign up for a TiDB Cloud account and login to use TiDB Cloud Data Service later: [click here](https://tidbcloud.com/console/data-service), and it will automatically give you a serverless TiDB database for free, which has 5GB free storage by default. The auto-creation of database will take no more than a minute.
 
 ## Step2: Create a new DataApp in TiDB Cloud Data Service
-1. Log in to [https://tidbcloud.com] and select the DataService from the left sidebar. On the DataService page, create a new DataApp. Keep theConnect to GitHub switch off.
+1. Log in to https://tidbcloud.com and select the `DataService` from the left sidebar. On the `DataService` page, create a new `DataApp`. Keep the `Connect to GitHub` switch off.
+![](./image/create_data_app.png)
 
 > Note:
 > 1. If there are no clusters existing under your project, you can click on create cluster to first create a database. Once the database is created, proceed to create a new DataApp.
 > 2. If you have already created a DataApp, check the top-right corner of the DataApp sidebar.
 
 2. Take note of the `{APP_ID}` for the current DataApp creation and the `{CLUSTER_ID}` associated with the cluster. We will need these two values later to configure the backend code repository.
-[图片]
+![](./image/data_app_info.png)
 
 ## Step3: Associate your github repo with TiDB Cloud DataApp
 1. Connect your github repo with DataApp
 
-> 1.1 Click the connect button in the connect to Github area of the configuration page.
-[图片]
+> 1.1 Click the `connect` button in the `connect to Github` area of the configuration page.
+![](./image/connect_to_github.png)
 > 1.2 In the pop-up window, follow the prompts to complete the corresponding operation steps.
-[图片]
+![](./image/connect_to_github_config.png)
 
 2. Trigger the DataApp deployment via git push
 In this step, we need to configure the previously recorded `{APP_ID}` and `{CLUSTER_ID}` into the current code repository, and then execute `git commit && push` to trigger the deployment of the DataApp.
@@ -56,7 +57,8 @@ git push
 ```
 
 At this point, go back to the webpage of the DataApp, and you will see a deployment record from GitHub. This deployment record is triggered and deployed through GitHub.
-[图片]
+![](./image/dataapp_deploylog.png)
+
 Now you need to refresh the page to see the latest APIs. You can see four endpoints successfully imported from Github on the left pane.
 
 3. Verify the DataApp deployment is successful
@@ -65,14 +67,14 @@ We have completed the creation of DataApp and now we are testing if our newly cr
 
 > 3.1 Create an ApiKey `{publickey}:{privatekey}` in DataApp and save it to local.
 On the authentication property of the data app property page, click the Create API Key button. This will generate a `{publickey}:{privatekey}` pair.  Please save it locally.
-[图片]
+![](./image/connect_api_key.png)
 
 > 3.2 Choose an endpoint and test if it is working correctly.
 Click on any endpoint in DataApp and click code example in the right-side panel; click online environment in the pop-up window, and copy the curl command into your terminal window.
-[图片]
+![](./image/code_example.png)
 
 Replace the fields `<PublicKey>` and `<PrivateKey>` in the copied content with the previously generated public key and private key. Send the request on the command line. If the corresponding data is returned normally, it indicates that the current DataApp has been set up successfully.
-[图片]
+![](./image/curl_result.png)
 
 ## Step4: Launch the web application
   
@@ -91,7 +93,7 @@ npm i && npm run dev
 ```
 5. Build and deploy the web app demo via Vercel
 Deploy our demo app to Vercel only take 3 minutes! Visit Vercel, register an account if you don't have one. Import the Git repository we forked & updated.
-[图片]
+![](./image/import_to_vercel.png)
 Add environmental variables here, and press the Deploy button, wait some minutes and all things get to work!
-[图片]
+![](./image/config_vercel.png)
 Upon successful deployment, we've finished the production deployment!
