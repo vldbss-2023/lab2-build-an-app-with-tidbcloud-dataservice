@@ -24,9 +24,10 @@ Before you start, ensure to have the following set up:
 
 ## Step3: Associate your github repo with TiDB Cloud DataApp
 1. Connect your github repo with DataApp
-1.1 Click the connect button in the connect to Github area of the configuration page.
+
+> 1.1 Click the connect button in the connect to Github area of the configuration page.
 [图片]
-1.2 In the pop-up window, follow the prompts to complete the corresponding operation steps.
+> 1.2 In the pop-up window, follow the prompts to complete the corresponding operation steps.
 [图片]
 
 2. Trigger the DataApp deployment via git push
