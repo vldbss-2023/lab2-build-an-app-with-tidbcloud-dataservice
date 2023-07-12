@@ -1,0 +1,12 @@
+apiVersion: pingcap.com/v1
+kind: TidbCluster
+metadata:
+  labels:
+    app.kubernetes.io/name: tidbcluster
+    app.kubernetes.io/instance: tidbcluster-sample
+    app.kubernetes.io/part-of: api-service
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: api-service
+  name: tidbcluster-sample
+spec:
+  # TODO(user): Add fields here

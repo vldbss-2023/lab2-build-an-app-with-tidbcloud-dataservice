@@ -1,0 +1,14 @@
+layout:
+- go.kubebuilder.io/v3
+projectName: api-service
+repo: github.com/vldbss-2023/lab2/dbaas101
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  group: pingcap.com
+  kind: TidbCluster
+  path: github.com/vldbss-2023/lab2/dbaas101/api/v1
+  version: v1
+version: "3"
