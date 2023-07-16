@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= controller:latest
+IMG ?= dbaas101:latest
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
 ENVTEST_K8S_VERSION = 1.25.0
 
@@ -67,6 +67,10 @@ build:
 .PHONY: run
 run: manifests generate fmt vet ## Run a controller from your host.
 	go run ./main.go
+
+.PHONY: vendor
+vendor:
+	./hack/vendor.sh 
 
 # If you wish built the manager image targeting other platforms you can use the --platform flag.
 # (i.e. docker build --platform linux/arm64 ). However, you must enable docker buildKit for it.
