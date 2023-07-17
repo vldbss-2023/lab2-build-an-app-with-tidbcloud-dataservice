@@ -6,7 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pingcap/log"
 	"go.uber.org/zap"
-	_ "k8s.io/apimachinery/pkg/api/errors"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/types"
 	_ "k8s.io/apimachinery/pkg/types"
 	_ "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -39,17 +40,19 @@ func (api *API) CreateTidbCluster(ctx context.Context, param *pingcapv1alph1.Tid
 }
 
 func (api *API) GetTidbCluster(ctx context.Context, param *GetTidbClusterParam) (*GetTidbClusterResult, error) {
-	list := new(pingcapv1alph1.TidbClusterList)
-	listOptions := &client.ListOptions{}
-	listOptions.FieldSelector = fields.OneTermEqualSelector("metadata.name", param.Name)
-	if err := api.k8sClient.List(ctx, list, listOptions); client.IgnoreNotFound(err) != nil {
-		log.Error("list tidb clusters failed", zap.Error(err))
+	tc := new(pingcapv1alph1.TidbCluster)
+	key := types.NamespacedName{
+		Namespace: param.Namespace,
+		Name:      param.Name,
+	}
+	if err := api.k8sClient.Get(ctx, key, tc); err != nil {
+		if apierrors.IsNotFound(err) {
+			return nil, ErrNotFound("tidb cluster not found")
+		}
+		log.Error("get tidb clusters failed", zap.Error(err))
 		return nil, ErrInternal(err.Error())
 	}
-	if len(list.Items) == 0 {
-		return nil, ErrNotFound("tidb cluster not found")
-	}
-	tc := list.Items[0]
+
 	resp := new(GetTidbClusterResult)
 	resp.Meta = TidbClusterMeta{
 		Name:      tc.Name,
