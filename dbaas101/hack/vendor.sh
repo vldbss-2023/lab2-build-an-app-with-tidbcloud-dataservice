@@ -19,4 +19,4 @@ for f in $(find $cache); do
         cp $f $destp/$relative
     fi
 done
-git apply hack/vendor.patch --directory=api-service
+git apply hack/vendor.patch --directory=dbaas101
