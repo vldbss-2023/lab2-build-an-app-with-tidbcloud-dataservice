@@ -35,8 +35,15 @@ func NewAPI(cli client.Client, reader client.Reader) (*API, error) {
 }
 
 func (api *API) CreateTidbCluster(ctx context.Context, param *pingcapv1alph1.TidbCluster) (*CreateTidbClusterResult, error) {
-	// TODO: create tidb cluster cr.
-	return nil, ErrNotImplemented()
+	if err := api.k8sClient.Create(ctx, param); err != nil {
+		if apierrors.IsAlreadyExists(err) {
+			return nil, ErrNotFound("tidb cluster already existed")
+		}
+		log.Error("create tidb clusters failed", zap.Error(err))
+		return nil, ErrInternal(err.Error())
+	}
+	resp := new(CreateTidbClusterResult)
+	return resp, nil
 }
 
 func (api *API) GetTidbCluster(ctx context.Context, param *GetTidbClusterParam) (*GetTidbClusterResult, error) {
