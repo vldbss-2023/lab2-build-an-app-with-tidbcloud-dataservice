@@ -35,8 +35,50 @@ func NewAPI(cli client.Client, reader client.Reader) (*API, error) {
 }
 
 func (api *API) CreateTidbCluster(ctx context.Context, param *pingcapv1alph1.TidbCluster) (*CreateTidbClusterResult, error) {
-	// TODO: create tidb cluster cr.
-	return nil, ErrNotImplemented()
+	if err := api.k8sClient.Create(ctx, param); err != nil {
+		if apierrors.IsAlreadyExists(err) {
+			return nil, ErrNotFound("tidb cluster already existed")
+		}
+		log.Error("create tidb clusters failed", zap.Error(err))
+		return nil, ErrInternal(err.Error())
+	}
+	resp := new(CreateTidbClusterResult)
+	return resp, nil
+}
+
+func (api *API) UpdateTidbCluster(ctx context.Context, param *UpdateTidbClusterParam) (*UpdateTidbClusterResult, error) {
+	tc := new(pingcapv1alph1.TidbCluster)
+	key := types.NamespacedName{
+		Namespace: param.Namespace,
+		Name:      param.Name,
+	}
+	if err := api.k8sClient.Get(ctx, key, tc); err != nil {
+		if apierrors.IsNotFound(err) {
+			return nil, ErrNotFound("tidb cluster not found")
+		}
+		log.Error("get tidb clusters failed", zap.Error(err))
+		return nil, ErrInternal(err.Error())
+	}
+	if param.PD != nil && tc.Spec.PD != nil {
+		tc.Spec.PD.Replicas = param.PD.Replicas
+	}
+	if param.TiDB != nil && tc.Spec.TiDB != nil {
+		tc.Spec.TiDB.Replicas = param.TiDB.Replicas
+	}
+
+	if param.TiKV != nil && tc.Spec.TiKV != nil {
+		tc.Spec.TiDB.Replicas = param.TiDB.Replicas
+	}
+
+	if param.TiFlash != nil && tc.Spec.TiFlash != nil {
+		tc.Spec.TiFlash.Replicas = param.TiFlash.Replicas
+	}
+	if err := api.k8sClient.Update(ctx, tc); err != nil {
+		log.Error("update tidb clusters failed", zap.Error(err))
+		return nil, ErrInternal(err.Error())
+	}
+	resp := new(UpdateTidbClusterResult)
+	return resp, nil
 }
 
 func (api *API) GetTidbCluster(ctx context.Context, param *GetTidbClusterParam) (*GetTidbClusterResult, error) {
@@ -107,6 +149,7 @@ func (api *API) DeleteTidbCluster(ctx context.Context, param *DeleteTidbClusterP
 // @Description	    Create tidb cluster
 // @Accept			json
 // @Produce			json
+// @Param			param			body		pingcapv1alph1.TidbCluster	    true	"param"
 // @Success			200	                    {object}	CreateTidbClusterResult
 // @Failure      	400  		            {object}  	ErrResp
 // @Failure      	500  		            {object}  	ErrResp
@@ -118,6 +161,32 @@ func (api *API) CreateTidbClusterHandler(ctx *gin.Context) {
 		return
 	}
 	resp, err := api.CreateTidbCluster(ctx, param)
+	if err != nil {
+		EncodeError(ctx, err)
+		return
+	}
+	EncodeResp(ctx, resp)
+}
+
+// @Summary		    Update tidb cluster
+// @Tags		    tidb cluster
+// @Description	    Update tidb cluster
+// @Accept			json
+// @Produce			json
+// @Param			param			body		UpdateTidbClusterParam	    true	"param"
+// @Success			200	                    {object}	UpdateTidbClusterResult
+// @Failure      	400  		            {object}  	ErrResp
+// @Failure      	500  		            {object}  	ErrResp
+// @Router			/api/v1/tidbclusters [post]
+func (api *API) UpdateTidbClusterHandler(ctx *gin.Context) {
+	param := new(UpdateTidbClusterParam)
+	if err := ctx.BindJSON(param); err != nil {
+		EncodeError(ctx, ErrInvalidParameter(err.Error()))
+		return
+	}
+	param.Namespace = ctx.Param("namespace")
+	param.Name = ctx.Param("name")
+	resp, err := api.UpdateTidbCluster(ctx, param)
 	if err != nil {
 		EncodeError(ctx, err)
 		return
