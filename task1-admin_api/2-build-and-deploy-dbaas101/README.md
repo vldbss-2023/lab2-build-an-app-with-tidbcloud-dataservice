@@ -3,6 +3,13 @@
 The following steps guides you through the process of building and deploying dbaas101 service to EKS cluster.
 
 The source code is under `dbaas101` folder.
+   
+0. Export some env variable. `STUDENT_NAME` should be your own name
+    ```bash
+    export STUDENT_NAME=XXXX
+    export AWS_ACCOUNT_ID=335771843383
+    export REGION=ap-southeast-1
+    ```
 
 1. Install docker, skip if docker is already installed.
 
@@ -12,13 +19,13 @@ The source code is under `dbaas101` folder.
     ```bash
     aws ecr create-repository \
         --repository-name lab2/dbaas101 \
-        --region <region>
+        --region ${REGION}
     ```
 
 3. Authenticate to your default registry.
 
     ```bash
-    aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.region.amazonaws.com
+    aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com
     ```
 
 4. Build dbaas101 image an push to ECR. The following instructions run under `dbaas101/` folder.
@@ -31,14 +38,14 @@ The source code is under `dbaas101` folder.
     2. Build image and push to ECR.
         ```bash
         GOOS=linux GOARCH=amd64 LDFLAGS="" make build
-        docker build --platform=linux/amd64 -q -f Dockerfile -t lab2/dbaas101:alpha .
-        docker tag lab2/dbaas101:alpha <aws_account_id>.dkr.ecr.<region>.amazonaws.com/lab2/dbaas101:alpha
-        docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/lab2/dbaas101:alpha
+        docker build --platform=linux/amd64 -q -f Dockerfile -t lab2/dbaas101:${STUDENT_NAME} .
+        docker tag lab2/dbaas101:${STUDENT_NAME} ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab2/dbaas101:${STUDENT_NAME}
+        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab2/dbaas101:${STUDENT_NAME}
         ```
 
     3. Deploy dbaas101 to EKS.
         ```bash
-        sed -i "s/image: (v.*)/image: <your image url>/g" manifests/dbaas101-resources.yaml
+        sed -i "s#<your image url>#${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab2/dbaas101:${STUDENT_NAME}#g" manifests/dbaas101-resources.yaml
         kubectl apply -f manifests/dbaas101-resources.yaml
         ```
 
