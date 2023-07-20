@@ -18,7 +18,7 @@ The source code is under `dbaas101` folder.
 2. Create a ECR repository in your AWS account.
     ```bash
     aws ecr create-repository \
-        --repository-name lab2/dbaas101 \
+        --repository-name lab4/dbaas101 \
         --region ${REGION}
     ```
 
@@ -63,5 +63,10 @@ The source code is under `dbaas101` folder.
 
     2. Back to the original shell session and curl the api.
         ```bash
+        # List Clusters
         curl http://localhost:8082/api/v1/tidbclusters
+        # Get Cluster info
+        curl  http://localhost:8082/api/v1/tidbclusters/default/basic
+        # Delete Cluster
+        curl -X DELETE http://localhost:8082/api/v1/tidbclusters/default/basic
         ```
