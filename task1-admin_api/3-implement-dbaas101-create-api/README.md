@@ -5,10 +5,10 @@ The following steps guides you through the process of building and deploying dba
 
 The source code is under `dbaas101` folder.
 
-1. Implement the `CreatTidbCluster` function
-Read the code in `dbaas101/pkg/service/api.go` and implement the `CreateTidbCluster` function.
+1. Implement the `UpdateTidbCluster` function
+Read the code in `dbaas101/pkg/service/api.go` and implement the `UpdateTidbCluster` function.
 
-You can read the `GetTidbCluster`, `ListTidbCluster` and `DeleteTidbCluster` to learn how to use 
+You can read the `CreateTidbCluster`, `GetTidbCluster`, `ListTidbCluster` and `DeleteTidbCluster` to learn how to use 
 the `client.Client` to interact with k8s apiserver.
 
 Commit your implementation.

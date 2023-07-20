@@ -1,4 +1,4 @@
-# lab2-build-an-app-with-tidbcloud-dataservice
+# lab4-build-an-app-with-tidbcloud-dataservice
 
 Follow the [guide](https://github.com/tidbcloud/data-service-example) step by step.
 1. Create a new DataApp in TiDB Cloud Data Service
