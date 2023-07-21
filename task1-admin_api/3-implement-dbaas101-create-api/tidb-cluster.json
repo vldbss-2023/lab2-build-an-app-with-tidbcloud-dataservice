@@ -2,7 +2,8 @@
   "apiVersion": "pingcap.com/v1alpha1",
   "kind": "TidbCluster",
   "metadata": {
-    "name": "basic"
+    "name": "basic",
+    "namespace": "default"
   },
   "spec": {
     "version": "v7.1.0",
