@@ -38,7 +38,7 @@ Other references:
 
     2. Deploy your dbaas101 to EKS
         ```bash
-        sed -i "s#image: (v.*)#image: ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab4/dbaas101:${STUDENT_NAME}_modify#g" manifests/dbaas101-resources.yaml
+        sed -i "s#image: .*#image: ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab4/dbaas101:${STUDENT_NAME}_modify#g" manifests/dbaas101-resources.yaml
         kubectl apply -f manifests/dbaas101-resources.yaml
         ```
 
