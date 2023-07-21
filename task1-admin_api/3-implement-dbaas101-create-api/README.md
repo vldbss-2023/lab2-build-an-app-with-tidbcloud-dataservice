@@ -21,18 +21,24 @@ Other references:
 
 
 2. Deploy dbaas101 again
+    0. Export some env variable. `STUDENT_NAME` should be your own name
+        ```bash
+         export STUDENT_NAME=XXXX
+         export AWS_ACCOUNT_ID=335771843383
+         export REGION=ap-southeast-1
+        ```
 
     1. build a new image and push to ECR.
         ```bash
         GOOS=linux GOARCH=amd64 LDFLAGS="" make build
-        docker build --platform=linux/amd64 -q -f Dockerfile -t lab2/dbaas101:latest .
-        docker tag lab2/dbaas101:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/lab2/dbaas101:$(git rev-parse --short HEAD)
-        docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/lab2/dbaas101:$(git rev-parse --short HEAD)
+        docker build --platform=linux/amd64 -q -f Dockerfile -t lab4/dbaas101:${STUDENT_NAME}_modify .
+        docker tag lab4/dbaas101:${STUDENT_NAME} ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab4/dbaas101:${STUDENT_NAME}_modify
+        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab4/dbaas101:${STUDENT_NAME}_modify
         ```
 
     2. Deploy your dbaas101 to EKS
         ```bash
-        sed -i "s/image: (v.*)/image: <your image url>/g" manifests/dbaas101-resources.yaml
+        sed -i "s#image: (v.*)#image: ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab4/dbaas101:${STUDENT_NAME}_modify#g" manifests/dbaas101-resources.yaml
         kubectl apply -f manifests/dbaas101-resources.yaml
         ```
 
