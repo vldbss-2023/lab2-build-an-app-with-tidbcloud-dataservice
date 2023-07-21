@@ -32,7 +32,7 @@ Other references:
         ```bash
         GOOS=linux GOARCH=amd64 LDFLAGS="" make build
         docker build --platform=linux/amd64 -q -f Dockerfile -t lab4/dbaas101:${STUDENT_NAME}_modify .
-        docker tag lab4/dbaas101:${STUDENT_NAME} ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab4/dbaas101:${STUDENT_NAME}_modify
+        docker tag lab4/dbaas101:${STUDENT_NAME}_modify ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab4/dbaas101:${STUDENT_NAME}_modify
         docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab4/dbaas101:${STUDENT_NAME}_modify
         ```
 
