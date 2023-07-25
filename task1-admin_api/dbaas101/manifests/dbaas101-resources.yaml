@@ -55,7 +55,7 @@ spec:
         - --api-bind-address=:8082
         command:
         - /dbaas101
-        image: 335771843383.dkr.ecr.ap-southeast-1.amazonaws.com/lab2/dbaas101:bing.wang
+        image: <your image url>
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3

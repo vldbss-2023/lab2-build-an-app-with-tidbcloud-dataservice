@@ -44,8 +44,14 @@ The source code is under `dbaas101` folder.
         ```
 
     3. Deploy dbaas101 to EKS. (Note: you need to init kubenetes configuration file at first.[click here](https://github.com/vldbss-2023/lab1-deploy-tidb-cluster-on-aws-eks/tree/main/1-create-an-eks-cluster#25-scoring-point-interact-with-the-newly-created-eks-cluster) )
+        Linux:
         ```bash
         sed -i "s#<your image url>#${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab4/dbaas101:${STUDENT_NAME}#g" manifests/dbaas101-resources.yaml
+        kubectl apply -f manifests/dbaas101-resources.yaml
+        ```
+        Mac:
+        ```bash
+        sed -i  "" "s#<your image url>#${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/lab4/dbaas101:${STUDENT_NAME}#g" manifests/dbaas101-resources.yaml
         kubectl apply -f manifests/dbaas101-resources.yaml
         ```
 
